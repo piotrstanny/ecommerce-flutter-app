@@ -16,6 +16,8 @@ import 'package:ecommerce_app/src/constants/app_sizes.dart';
 import 'package:ecommerce_app/src/features/products/domain/product.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../common_widgets/error_message_widget.dart';
+
 /// Shows the product page for a given product ID.
 class ProductScreen extends StatelessWidget {
   const ProductScreen({Key? key, required this.productId}) : super(key: key);
@@ -27,21 +29,25 @@ class ProductScreen extends StatelessWidget {
       appBar: const HomeAppBar(),
       body: Consumer(
         builder: (context, ref, _) {
-          final productsRepository = ref.watch(productsRepositoryProvider);
-          final product = productsRepository.getProduct(productId);
-          return product == null
-              ? EmptyPlaceholderWidget(
-                  message: 'Product not found'.hardcoded,
-                )
-              : CustomScrollView(
-                  slivers: [
-                    ResponsiveSliverCenter(
-                      padding: const EdgeInsets.all(Sizes.p16),
-                      child: ProductDetails(product: product),
-                    ),
-                    ProductReviewsList(productId: productId),
-                  ],
-                );
+          final product = ref.watch(productProvider(productId));
+          return product.when(
+            data: (product) => product == null
+                ? EmptyPlaceholderWidget(
+                    message: 'Product not found'.hardcoded,
+                  )
+                : CustomScrollView(
+                    slivers: [
+                      ResponsiveSliverCenter(
+                        padding: const EdgeInsets.all(Sizes.p16),
+                        child: ProductDetails(product: product),
+                      ),
+                      ProductReviewsList(productId: productId),
+                    ],
+                  ),
+            error: (err, stack) =>
+                Center(child: ErrorMessageWidget(err.toString())),
+            loading: () => const Center(child: CircularProgressIndicator()),
+          );
         },
       ),
     );
