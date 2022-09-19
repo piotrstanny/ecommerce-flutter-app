@@ -1,9 +1,8 @@
 import 'package:ecommerce_app/src/constants/test_products.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../domain/product.dart';
 
 class FakeProductsRepository {
-  FakeProductsRepository._();
-  static FakeProductsRepository instance = FakeProductsRepository._();
   final List<Product> _products = kTestProducts;
 
   List<Product> getProductsList() {
@@ -27,3 +26,8 @@ class FakeProductsRepository {
         .map((products) => products.firstWhere((product) => product.id == id));
   }
 }
+
+// Riverpod Provider of this repository
+final productsRepositoryProvider = Provider<FakeProductsRepository>((ref) {
+  return FakeProductsRepository();
+});
