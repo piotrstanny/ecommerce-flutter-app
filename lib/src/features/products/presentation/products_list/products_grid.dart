@@ -12,6 +12,9 @@ import 'package:ecommerce_app/src/constants/app_sizes.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../common_widgets/async_value_widget.dart';
+import '../../domain/product.dart';
+
 /// A widget that displays the list of products that match the search query.
 class ProductsGrid extends ConsumerWidget {
   const ProductsGrid({Key? key}) : super(key: key);
@@ -19,7 +22,8 @@ class ProductsGrid extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final productsListValue = ref.watch(productsListStreamProvider);
-    return productsListValue.when(
+    return AsyncValueWidget<List<Product>>(
+      value: productsListValue,
       data: (products) => products.isEmpty
           ? Center(
               child: Text(
@@ -40,8 +44,6 @@ class ProductsGrid extends ConsumerWidget {
                 );
               },
             ),
-      error: (err, stack) => Center(child: ErrorMessageWidget(err.toString())),
-      loading: () => const Center(child: CircularProgressIndicator()),
     );
   }
 }
