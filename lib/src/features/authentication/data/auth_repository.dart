@@ -15,8 +15,12 @@ abstract class AuthRepository {
 // RIVERPOD PROVIDERS FOR THIS REPO CLASS
 
 final authRepositoryProvider = Provider<AuthRepository>((ref) {
-  const isFake = String.fromEnvironment('useFakeRepo') == 'true';
-  return isFake ? FakeAuthRepository() : FirebaseAuthRepository();
+  // const isFake = String.fromEnvironment('useFakeRepo') == 'true';
+  // return isFake ? FakeAuthRepository() : FirebaseAuthRepository();
+
+  final auth = FakeAuthRepository();
+  ref.onDispose(() => auth.dispose());
+  return auth;
 });
 
 final authStateChangesProvider = StreamProvider.autoDispose<AppUser?>((ref) {
