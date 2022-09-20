@@ -1,32 +1,26 @@
 import 'package:ecommerce_app/src/features/authentication/domain/app_user.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'auth_repository.dart';
 
-class FakeAuthRepository {
+class FakeAuthRepository implements AuthRepository {
+  @override
   Stream<AppUser?> authStateChanges() => Stream.value(null);
 
+  @override
   AppUser? get currentUser => null; //todo to be finished
 
+  @override
   Future<void> signInWithEmailAndPassword(String email, String password) async {
     //todo implement
   }
 
+  @override
   Future<void> createUserWithEmailAndPassword(
       String email, String password) async {
     //todo implement
   }
 
+  @override
   Future<void> signOut() async {
     //todo implement
   }
 }
-
-// RIVERPOD PROVIDERS FOR THIS REPO
-
-final authRepositoryProvider = Provider<FakeAuthRepository>((ref) {
-  return FakeAuthRepository();
-});
-
-final authStateChangesProvider = StreamProvider.autoDispose<AppUser?>((ref) {
-  final authRepository = ref.watch(authRepositoryProvider);
-  return authRepository.authStateChanges();
-});
