@@ -30,7 +30,8 @@ class FakeProductsRepository {
   }
 }
 
-// Riverpod Providers for above methods
+// RIVERPOD PROVIDERS FOR THIS REPO:
+
 final productsRepositoryProvider = Provider<FakeProductsRepository>((ref) {
   return FakeProductsRepository();
 });
