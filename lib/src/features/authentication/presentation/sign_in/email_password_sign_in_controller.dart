@@ -1,7 +1,6 @@
 import 'package:ecommerce_app/src/features/authentication/data/auth_repository.dart';
 import 'package:ecommerce_app/src/features/authentication/presentation/sign_in/email_password_sign_in_state.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../data/fake_auth_repository.dart';
 
 class EmailPasswordSignInController
     extends StateNotifier<EmailPasswordSignInState> {
@@ -29,7 +28,9 @@ class EmailPasswordSignInController
   }
 
   void updateFormType(EmailPasswordSignInFormType formType) {
-    state = state.copyWith(formType: formType);
+    state = state.copyWith(
+      formType: formType,
+    );
   }
 }
 
