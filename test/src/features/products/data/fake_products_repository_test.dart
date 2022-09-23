@@ -4,8 +4,11 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('FakeProductsRepository', () {
+    FakeProductsRepository makeProductsRepository() =>
+        FakeProductsRepository(addDelay: false);
+
     test('getProductsList returns global list', () {
-      final productsRepository = FakeProductsRepository();
+      final productsRepository = makeProductsRepository();
       expect(
         productsRepository.getProductsList(),
         kTestProducts,
@@ -13,7 +16,7 @@ void main() {
     });
 
     test('getProduct(1) returns first item', () {
-      final productsRepository = FakeProductsRepository();
+      final productsRepository = makeProductsRepository();
       expect(
         productsRepository.getProduct('1'),
         kTestProducts[0],
@@ -21,7 +24,7 @@ void main() {
     });
 
     test('getProduct(999) returns null', () {
-      final productsRepository = FakeProductsRepository();
+      final productsRepository = makeProductsRepository();
       expect(
         productsRepository.getProduct('999'),
         null,
@@ -29,7 +32,7 @@ void main() {
     });
 
     test('fetchProductsList returns global list of products', () async {
-      final productsRepository = FakeProductsRepository();
+      final productsRepository = makeProductsRepository();
       expect(
         await productsRepository.fetchProductsList(),
         kTestProducts,
@@ -37,7 +40,7 @@ void main() {
     });
 
     test('watchProductsList emits global list of products', () {
-      final productsRepository = FakeProductsRepository();
+      final productsRepository = makeProductsRepository();
       expect(
         productsRepository.watchProductsList(),
         emits(kTestProducts),
@@ -45,7 +48,7 @@ void main() {
     });
 
     test('watchProduct(1) emits first item', () {
-      final productsRepository = FakeProductsRepository();
+      final productsRepository = makeProductsRepository();
       expect(
         productsRepository.watchProduct('1'),
         emits(kTestProducts[0]),
@@ -53,7 +56,7 @@ void main() {
     });
 
     test('watchProduct(999) emits null', () {
-      final productsRepository = FakeProductsRepository();
+      final productsRepository = makeProductsRepository();
       expect(
         productsRepository.watchProduct('999'),
         emits(null),
