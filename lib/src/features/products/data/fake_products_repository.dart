@@ -10,8 +10,20 @@ class FakeProductsRepository {
     return _products;
   }
 
+  Product? _getProduct(List<Product> products, String id) {
+    try {
+      return products.firstWhere((product) => product.id == id);
+    } catch (err) {
+      return null;
+    }
+  }
+
   Product? getProduct(String id) {
-    return _products.firstWhere((product) => product.id == id);
+    return _getProduct(_products, id);
+  }
+
+  Stream<Product?> watchProduct(String id) {
+    return watchProductsList().map((products) => _getProduct(products, id));
   }
 
   Future<List<Product>> fetchProductsList() async {
@@ -22,11 +34,6 @@ class FakeProductsRepository {
   Stream<List<Product>> watchProductsList() async* {
     await Future.delayed(const Duration(seconds: 2));
     yield _products;
-  }
-
-  Stream<Product?> watchProduct(String id) {
-    return watchProductsList()
-        .map((products) => products.firstWhere((product) => product.id == id));
   }
 }
 
