@@ -8,38 +8,52 @@ class MockAuthRepository extends Mock implements FakeAuthRepository {}
 
 void main() {
   group('AccountScreenController', () {
+    late MockAuthRepository authRepository;
+    late AccountScreenController controller;
+    // Initialize instances for all tests
+    setUp(() {
+      authRepository = MockAuthRepository();
+      controller = AccountScreenController(authRepository: authRepository);
+    });
+
     test('Initial state is Async.data', () {
-      final authRepository = FakeAuthRepository();
-      final controller =
-          AccountScreenController(authRepository: authRepository);
       expect(controller.debugState, const AsyncData<void>(null));
     });
 
     test('signOut success', () async {
       // setup
-      final authRepository = MockAuthRepository();
       when(authRepository.signOut).thenAnswer((_) => Future.value());
-      final controller =
-          AccountScreenController(authRepository: authRepository);
+      expectLater(
+        controller.stream,
+        emitsInOrder(const [
+          AsyncLoading<void>(),
+          AsyncData<void>(null),
+        ]),
+      );
       // run
       await controller.signOut();
       // verify
-      expect(controller.debugState, const AsyncData<void>(null));
       verify(authRepository.signOut).called(1);
-    });
+    }, timeout: const Timeout(Duration(seconds: 1)));
 
     test('signOut failure', () async {
       // setup
-      final authRepository = MockAuthRepository();
       final exception = Exception('Conntection failed');
       when(authRepository.signOut).thenThrow(exception);
-      final controller =
-          AccountScreenController(authRepository: authRepository);
+      expectLater(
+        controller.stream,
+        emitsInOrder([
+          const AsyncLoading<void>(),
+          predicate<AsyncValue<void>>((value) {
+            expect(value.hasError, true);
+            return true;
+          }),
+        ]),
+      );
       // run
       await controller.signOut();
       // verify
       verify(authRepository.signOut).called(1);
-      expect(controller.debugState.hasError, true);
-    });
+    }, timeout: const Timeout(Duration(seconds: 1)));
   });
 }
