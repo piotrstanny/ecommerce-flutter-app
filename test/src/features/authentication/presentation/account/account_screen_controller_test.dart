@@ -1,3 +1,5 @@
+@Timeout(Duration(seconds: 1))
+
 import 'package:ecommerce_app/src/features/authentication/presentation/account/account_screen_controller.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -33,7 +35,7 @@ void main() {
       await controller.signOut();
       // verify
       verify(authRepository.signOut).called(1);
-    }, timeout: const Timeout(Duration(seconds: 1)));
+    });
 
     test('signOut failure', () async {
       // setup
@@ -53,6 +55,6 @@ void main() {
       await controller.signOut();
       // verify
       verify(authRepository.signOut).called(1);
-    }, timeout: const Timeout(Duration(seconds: 1)));
+    });
   });
 }
