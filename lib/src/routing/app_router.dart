@@ -1,4 +1,4 @@
-import 'package:ecommerce_app/src/features/authentication/data/auth_repository.dart';
+import 'package:ecommerce_app/src/features/authentication/data/fake_auth_repository.dart';
 import 'package:ecommerce_app/src/features/authentication/presentation/account/account_screen.dart';
 import 'package:ecommerce_app/src/features/authentication/presentation/sign_in/email_password_sign_in_screen.dart';
 import 'package:ecommerce_app/src/features/authentication/presentation/sign_in/email_password_sign_in_state.dart';
@@ -29,11 +29,9 @@ final goRouterProvider = Provider<GoRouter>((ref) {
   return GoRouter(
     initialLocation: '/',
     debugLogDiagnostics: false,
-    errorBuilder: (context, state) => const NotFoundScreen(),
-    refreshListenable: GoRouterRefreshStream(authRepository.authStateChanges()),
     redirect: (state) {
-      final loggedIn = authRepository.currentUser != null;
-      if (loggedIn) {
+      final isLoggedIn = authRepository.currentUser != null;
+      if (isLoggedIn) {
         if (state.location == '/signIn') {
           return '/';
         }
@@ -44,6 +42,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       }
       return null;
     },
+    refreshListenable: GoRouterRefreshStream(authRepository.authStateChanges()),
     routes: [
       GoRoute(
         path: '/',
@@ -84,14 +83,11 @@ final goRouterProvider = Provider<GoRouter>((ref) {
               GoRoute(
                 path: 'checkout',
                 name: AppRoute.checkout.name,
-                pageBuilder: (context, state) {
-                  debugPrint(state.location);
-                  return MaterialPage(
-                    key: ValueKey(state.location),
-                    fullscreenDialog: true,
-                    child: const CheckoutScreen(),
-                  );
-                },
+                pageBuilder: (context, state) => MaterialPage(
+                  key: ValueKey(state.location),
+                  fullscreenDialog: true,
+                  child: const CheckoutScreen(),
+                ),
               ),
             ],
           ),
@@ -127,5 +123,6 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         ],
       ),
     ],
+    errorBuilder: (context, state) => const NotFoundScreen(),
   );
 });

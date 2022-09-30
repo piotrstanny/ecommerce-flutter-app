@@ -1,11 +1,9 @@
+import 'package:ecommerce_app/src/common_widgets/error_message_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'error_message_widget.dart';
-
 class AsyncValueWidget<T> extends StatelessWidget {
-  const AsyncValueWidget({Key? key, required this.value, required this.data})
-      : super(key: key);
+  const AsyncValueWidget({super.key, required this.value, required this.data});
   final AsyncValue<T> value;
   final Widget Function(T) data;
 
@@ -13,7 +11,7 @@ class AsyncValueWidget<T> extends StatelessWidget {
   Widget build(BuildContext context) {
     return value.when(
       data: data,
-      error: (err, st) => Center(child: ErrorMessageWidget(err.toString())),
+      error: (e, st) => Center(child: ErrorMessageWidget(e.toString())),
       loading: () => const Center(child: CircularProgressIndicator()),
     );
   }
