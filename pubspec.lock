@@ -122,7 +122,7 @@ packages:
       name: flutter_launcher_icons
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.9.2"
+    version: "0.9.3"
   flutter_layout_grid:
     dependency: "direct main"
     description:
@@ -191,7 +191,7 @@ packages:
       name: go_router
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.1.0"
+    version: "3.1.1"
   http_multi_server:
     dependency: transitive
     description:
@@ -364,7 +364,7 @@ packages:
       name: rxdart
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.27.3"
+    version: "0.27.4"
   shelf:
     dependency: transitive
     description:

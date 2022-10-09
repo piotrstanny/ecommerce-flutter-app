@@ -25,7 +25,7 @@ class Robot {
       ProviderScope(
         overrides: [
           productsRepositoryProvider.overrideWithValue(productsRepository),
-          authRepositoryProvider.overrideWithValue(authRepository)
+          authRepositoryProvider.overrideWithValue(authRepository),
         ],
         child: const MyApp(),
       ),
@@ -41,11 +41,12 @@ class Robot {
   Future<void> openPopupMenu() async {
     final finder = find.byType(MoreMenuButton);
     final matches = finder.evaluate();
-    // if matches not empty, it means we're running on a small screen
-    // and there is additional tap needed
+    // if an item is found, it means that we're running
+    // on a small window and can tap to reveal the menu
     if (matches.isNotEmpty) {
       await tester.tap(finder);
       await tester.pumpAndSettle();
     }
+    // else no-op, as the items are already visible
   }
 }

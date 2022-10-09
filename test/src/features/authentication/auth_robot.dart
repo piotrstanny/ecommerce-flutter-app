@@ -1,4 +1,5 @@
 import 'package:ecommerce_app/src/common_widgets/alert_dialogs.dart';
+import 'package:ecommerce_app/src/common_widgets/custom_text_button.dart';
 import 'package:ecommerce_app/src/common_widgets/primary_button.dart';
 import 'package:ecommerce_app/src/features/authentication/data/fake_auth_repository.dart';
 import 'package:ecommerce_app/src/features/authentication/presentation/account/account_screen.dart';
@@ -19,8 +20,6 @@ class AuthRobot {
     await tester.tap(finder);
     await tester.pumpAndSettle();
   }
-
-  // * Pump EmailPasswordSignIn screen and relevant methods
 
   Future<void> pumpEmailPasswordSignInContents({
     required FakeAuthRepository authRepository,
@@ -51,6 +50,13 @@ class AuthRobot {
     await tester.pumpAndSettle();
   }
 
+  Future<void> tapFormToggleButton() async {
+    final toggleButton = find.byType(CustomTextButton);
+    expect(toggleButton, findsOneWidget);
+    await tester.tap(toggleButton);
+    await tester.pumpAndSettle();
+  }
+
   Future<void> enterEmail(String email) async {
     final emailField = find.byKey(EmailPasswordSignInScreen.emailKey);
     expect(emailField, findsOneWidget);
@@ -61,6 +67,16 @@ class AuthRobot {
     final passwordField = find.byKey(EmailPasswordSignInScreen.passwordKey);
     expect(passwordField, findsOneWidget);
     await tester.enterText(passwordField, password);
+  }
+
+  void expectCreateAccountButtonFound() {
+    final dialogTitle = find.text('Create an account');
+    expect(dialogTitle, findsOneWidget);
+  }
+
+  void expectCreateAccountButtonNotFound() {
+    final dialogTitle = find.text('Create an account');
+    expect(dialogTitle, findsNothing);
   }
 
   Future<void> signInWithEmailAndPassword() async {
@@ -76,14 +92,14 @@ class AuthRobot {
     await tester.pumpAndSettle();
   }
 
-  // * Pump AccountScreen screen and relevant methods
-
   Future<void> pumpAccountScreen({FakeAuthRepository? authRepository}) async {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
           if (authRepository != null)
-            authRepositoryProvider.overrideWithValue(authRepository)
+            authRepositoryProvider.overrideWithValue(
+              authRepository,
+            )
         ],
         child: const MaterialApp(
           home: AccountScreen(),
@@ -94,13 +110,6 @@ class AuthRobot {
 
   Future<void> tapLogoutButton() async {
     final logoutButton = find.text('Logout');
-    expect(logoutButton, findsOneWidget);
-    await tester.tap(logoutButton);
-    await tester.pump();
-  }
-
-  Future<void> tapDialogLogoutButton() async {
-    final logoutButton = find.byKey(kDialogDefaultKey);
     expect(logoutButton, findsOneWidget);
     await tester.tap(logoutButton);
     await tester.pump();
@@ -123,14 +132,21 @@ class AuthRobot {
     expect(dialogTitle, findsNothing);
   }
 
+  Future<void> tapDialogLogoutButton() async {
+    final logoutButton = find.byKey(kDialogDefaultKey);
+    expect(logoutButton, findsOneWidget);
+    await tester.tap(logoutButton);
+    await tester.pump();
+  }
+
   void expectErrorAlertFound() {
-    final error = find.text('Error');
-    expect(error, findsOneWidget);
+    final finder = find.text('Error');
+    expect(finder, findsOneWidget);
   }
 
   void expectErrorAlertNotFound() {
-    final error = find.text('Error');
-    expect(error, findsNothing);
+    final finder = find.text('Error');
+    expect(finder, findsNothing);
   }
 
   void expectCircularProgressIndicator() {
